@@ -1,0 +1,34 @@
+
+digraph G {
+  rankdir=TB; fontname="Helvetica"; nodesep=0.35; ranksep=0.45; size="8,10"; bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, margin="0.15,0.08", color="#444455"];
+  edge [color="#555566", arrowsize=0.7, fontname="Helvetica", fontsize=9];
+
+  subgraph cluster_src { label="Sources"; style="rounded,dashed"; color="#999999"; fontsize=11;
+    syn [label="Synthetic generator\n(users, items, interactions\n+ injected defects)", fillcolor="#eef2f7"];
+    csv [label="Real CSV files\n(e.g. MovieLens)", fillcolor="#eef2f7"]; }
+
+  ing [label="1  Ingestion\nraw CSV + manifest (MD5)", fillcolor="#dbe9f7"];
+  val [label="2  Validation\nnulls · dtypes · ratings\ntimestamps · duplicates · FK", fillcolor="#dbe9f7"];
+  prep [label="3  Preparation\nimpute · de-dup · standardise", fillcolor="#dbe9f7"];
+  trans [label="4  Transformation\ntime split · activity summary\npopularity · sparse matrix", fillcolor="#dbe9f7"];
+  feat [label="5  Feature store\nuser · item · interaction\nfeatures (point-in-time)", fillcolor="#fde8c8"];
+
+  subgraph cluster_train { label="6  Training (tracked)"; style="rounded"; color="#999999"; fontsize=11;
+    m1 [label="Popularity\nbaseline", fillcolor="#e6f2e0"];
+    m2 [label="ALS matrix\nfactorisation", fillcolor="#e6f2e0"];
+    m3 [label="Hybrid\nMF + pop + genre", fillcolor="#e6f2e0"]; }
+
+  ev [label="7  Evaluation\nP/R/NDCG@K · coverage\ndiversity · RMSE/MAE", fillcolor="#e6f2e0"];
+  mlf [label="Experiment tracking\nparams · metrics · artifacts\n(MLflow / local store)", shape=cylinder, fillcolor="#f3e3f3"];
+  err [label="data/errors\nquarantined rows +\nvalidation report", shape=note, fillcolor="#fadbd8"];
+  rep [label="reports/\ncomparison · catalog\nrun log", shape=note, fillcolor="#f5f5f5"];
+  srv [label="Prediction\nrecommend(user, K)\nreuses feature store", fillcolor="#fde8c8"];
+  orch [label="8  Orchestration: Airflow DAG / local DAG runner (task dependencies, retries, run log)", shape=box, style="filled,dashed", fillcolor="#fffbe6"];
+
+  syn -> ing; csv -> ing; ing -> val; val -> prep; val -> err [style=dashed, label="ERROR rows"];
+  prep -> trans; trans -> feat; feat -> m1; feat -> m2; m2 -> m3 [label="MF head"]; feat -> m3;
+  m1 -> ev; m2 -> ev; m3 -> ev; m1 -> mlf [style=dotted]; m2 -> mlf [style=dotted]; m3 -> mlf [style=dotted];
+  ev -> mlf [style=dotted, label="test metrics"]; ev -> rep; feat -> srv [style=dashed]; m3 -> srv [style=dashed];
+  orch -> ing [style=invis];
+}

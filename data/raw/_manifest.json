@@ -1,0 +1,33 @@
+{
+  "users": {
+    "rows": 1210,
+    "columns": [
+      "user_id",
+      "age",
+      "gender",
+      "country",
+      "signup_date"
+    ],
+    "md5": "09174191a7ec4a808eec7d671a36c7d6"
+  },
+  "items": {
+    "rows": 605,
+    "columns": [
+      "item_id",
+      "title",
+      "genres",
+      "release_year"
+    ],
+    "md5": "9583be447bd3ff80404e1146a6771794"
+  },
+  "interactions": {
+    "rows": 49707,
+    "columns": [
+      "user_id",
+      "item_id",
+      "rating",
+      "timestamp"
+    ],
+    "md5": "8de7a0a6ef7838a64d725715d545296e"
+  }
+}

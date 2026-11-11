@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+mlruns/
+models/*.pkl
+data/interim/
+data/features/
+data/processed/

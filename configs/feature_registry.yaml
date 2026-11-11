@@ -1,0 +1,30 @@
+# Feature registry = single source of truth for the feature catalog.
+# FeatureStore.build() asserts that the computed columns match this file exactly,
+# so the documentation can never drift from the code.
+# All features are computed "as of" the last TRAIN timestamp (point-in-time safe).
+user_features:
+  - {name: user_activity_count, dtype: int, description: "Number of training interactions of the user", formula: "count(interactions)", default_cold_start: 0}
+  - {name: user_avg_rating, dtype: float, description: "Mean rating given by the user", formula: "mean(rating)", default_cold_start: "global mean rating"}
+  - {name: user_rating_std, dtype: float, description: "Std-dev of the user's ratings (0 if <2 ratings)", formula: "std(rating)", default_cold_start: 0}
+  - {name: user_like_ratio, dtype: float, description: "Share of the user's interactions rated >= relevance threshold", formula: "mean(rating >= 4)", default_cold_start: "global like ratio"}
+  - {name: days_since_last_interaction, dtype: float, description: "Days between the user's last interaction and the as-of time (recency)", formula: "as_of - max(timestamp)", default_cold_start: "days since signup"}
+  - {name: user_history_days, dtype: float, description: "Days between first and last interaction", formula: "max(ts) - min(ts)", default_cold_start: 0}
+  - {name: user_tenure_days, dtype: float, description: "Days between signup and the as-of time", formula: "as_of - signup_date", default_cold_start: "computed from signup"}
+  - {name: preferred_category, dtype: category, description: "Genre with the largest rating-weighted share of the user's history", formula: "argmax(user_genre_affinity)", default_cold_start: "Unknown"}
+  - {name: preferred_category_share, dtype: float, description: "Affinity share of the preferred genre (taste concentration)", formula: "max(user_genre_affinity)", default_cold_start: 0}
+  - {name: age, dtype: int, description: "User age (imputed with the median when missing/invalid)", formula: "users.age", default_cold_start: "median age"}
+item_features:
+  - {name: item_popularity, dtype: int, description: "Number of training interactions with the item", formula: "count(interactions)", default_cold_start: 0}
+  - {name: item_popularity_rank, dtype: int, description: "Rank by item_popularity (1 = most popular)", formula: "rank(-item_popularity)", default_cold_start: "last rank"}
+  - {name: item_avg_rating, dtype: float, description: "Raw mean rating of the item", formula: "mean(rating)", default_cold_start: "global mean rating"}
+  - {name: item_bayes_rating, dtype: float, description: "Mean rating shrunk to the global mean: (C*m + sum)/(C + n)", formula: "(C*global_mean + sum(rating)) / (C + n)", default_cold_start: "global mean rating"}
+  - {name: item_like_ratio, dtype: float, description: "Share of item interactions rated >= relevance threshold", formula: "mean(rating >= 4)", default_cold_start: "global like ratio"}
+  - {name: item_age_years, dtype: float, description: "Years between release_year and the as-of year", formula: "as_of.year - release_year", default_cold_start: "median age"}
+  - {name: item_days_since_last_interaction, dtype: float, description: "Days since anyone last interacted with the item", formula: "as_of - max(timestamp)", default_cold_start: "days since first train event"}
+  - {name: item_n_genres, dtype: int, description: "Number of genres tagged on the item", formula: "len(genres)", default_cold_start: "n/a (catalogue attribute)"}
+  - {name: item_primary_genre, dtype: category, description: "First listed genre", formula: "genres[0]", default_cold_start: "n/a (catalogue attribute)"}
+interaction_features:
+  - {name: user_genre_affinity, dtype: "float[n_genres]", description: "User x genre matrix: rating-weighted share of the user's history in each genre (rows sum to 1)", formula: "normalise(R @ (G / n_genres))", default_cold_start: "uniform"}
+  - {name: genre_affinity_score, dtype: float, description: "Mean affinity of the user for the genres of the candidate item (user-item pair)", formula: "mean(user_genre_affinity[u, genres(i)])", default_cold_start: "uniform"}
+  - {name: item_bayes_minus_user_avg, dtype: float, description: "Item Bayesian rating minus the user's average rating (does the item beat the user's own bar?)", formula: "item_bayes_rating - user_avg_rating", default_cold_start: "item_bayes - global mean"}
+  - {name: preferred_category_match, dtype: int, description: "1 if the item's primary genre equals the user's preferred_category", formula: "item_primary_genre == preferred_category", default_cold_start: 0}

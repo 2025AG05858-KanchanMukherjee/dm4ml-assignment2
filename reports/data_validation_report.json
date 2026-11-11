@@ -1,0 +1,146 @@
+{
+  "users": {
+    "rows_in": 1210,
+    "rows_valid": 1187,
+    "rows_quarantined": 23,
+    "rows_with_warnings": 85,
+    "rules": [
+      {
+        "rule": "age_out_of_range",
+        "severity": "WARN",
+        "violations": 15
+      },
+      {
+        "rule": "duplicate_row",
+        "severity": "ERROR",
+        "violations": 10
+      },
+      {
+        "rule": "invalid_dtype_age",
+        "severity": "WARN",
+        "violations": 5
+      },
+      {
+        "rule": "invalid_signup_date",
+        "severity": "ERROR",
+        "violations": 8
+      },
+      {
+        "rule": "missing_age",
+        "severity": "WARN",
+        "violations": 25
+      },
+      {
+        "rule": "missing_country",
+        "severity": "WARN",
+        "violations": 40
+      },
+      {
+        "rule": "missing_user_id",
+        "severity": "ERROR",
+        "violations": 5
+      }
+    ]
+  },
+  "items": {
+    "rows_in": 605,
+    "rows_valid": 597,
+    "rows_quarantined": 8,
+    "rows_with_warnings": 38,
+    "rules": [
+      {
+        "rule": "duplicate_key",
+        "severity": "ERROR",
+        "violations": 5
+      },
+      {
+        "rule": "invalid_dtype_release_year",
+        "severity": "WARN",
+        "violations": 2
+      },
+      {
+        "rule": "missing_genres",
+        "severity": "WARN",
+        "violations": 8
+      },
+      {
+        "rule": "missing_item_id",
+        "severity": "ERROR",
+        "violations": 3
+      },
+      {
+        "rule": "missing_title",
+        "severity": "WARN",
+        "violations": 20
+      },
+      {
+        "rule": "release_year_out_of_range",
+        "severity": "WARN",
+        "violations": 8
+      }
+    ]
+  },
+  "interactions": {
+    "rows_in": 49707,
+    "rows_valid": 48029,
+    "rows_quarantined": 1678,
+    "rows_with_warnings": 0,
+    "rules": [
+      {
+        "rule": "duplicate_row",
+        "severity": "ERROR",
+        "violations": 146
+      },
+      {
+        "rule": "duplicate_user_item",
+        "severity": "ERROR",
+        "violations": 58
+      },
+      {
+        "rule": "fk_item_not_found",
+        "severity": "ERROR",
+        "violations": 378
+      },
+      {
+        "rule": "fk_user_not_found",
+        "severity": "ERROR",
+        "violations": 663
+      },
+      {
+        "rule": "invalid_dtype_rating",
+        "severity": "ERROR",
+        "violations": 30
+      },
+      {
+        "rule": "invalid_timestamp",
+        "severity": "ERROR",
+        "violations": 30
+      },
+      {
+        "rule": "missing_rating",
+        "severity": "ERROR",
+        "violations": 100
+      },
+      {
+        "rule": "missing_user_id",
+        "severity": "ERROR",
+        "violations": 30
+      },
+      {
+        "rule": "rating_out_of_range",
+        "severity": "ERROR",
+        "violations": 120
+      },
+      {
+        "rule": "timestamp_before_signup",
+        "severity": "ERROR",
+        "violations": 59
+      },
+      {
+        "rule": "timestamp_in_future",
+        "severity": "ERROR",
+        "violations": 80
+      }
+    ]
+  }
+}

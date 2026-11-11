@@ -1,0 +1,9 @@
+item_id,title,genres,release_year,violated_rules
+,Mystery Story 0075,Mystery,2003,missing_item_id
+,Horror Story 0298,Horror|Action,2012,missing_item_id
+,Animation Story 0586,Animation|Thriller,1998,missing_item_id
+I0211,Thriller Story 0211 (re-issue),thriller|adventure,1987,duplicate_key
+I0005,Documentary Story 0005 (re-issue),documentary|romance|mystery,2023,duplicate_key
+I0015,Thriller Story 0015 (re-issue),Thriller|Drama,2016,duplicate_key
+I0165,Mystery Story 0165 (re-issue),Mystery,1983,duplicate_key
+I0277,Horror Story 0277 (re-issue),Horror,2015,duplicate_key

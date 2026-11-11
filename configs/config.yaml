@@ -1,0 +1,60 @@
+# Central configuration for the whole pipeline. Every stage reads this file,
+# so a run is fully described by (code version, this file, random seed).
+seed: 42
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  features: data/features
+  errors: data/errors
+  models: models
+  reports: reports
+  mlruns: mlruns
+
+data:
+  source: synthetic          # synthetic | csv  (csv: copy users/items/interactions CSVs from csv_dir)
+  csv_dir: null
+  n_users: 1200
+  n_items: 600
+  start_date: "2023-01-01"
+  end_date: "2024-12-31"
+  inject_defects: true       # deliberately corrupt ~5% of rows so validation has work to do
+
+validation:
+  rating_min: 1
+  rating_max: 5
+  min_valid_timestamp: "2000-01-01"
+  reference_date: "2025-01-01"   # fixed (not "now") so validation is reproducible; later = "future"
+  age_min: 10
+  age_max: 100
+  release_year_min: 1950
+  release_year_max: 2025
+
+split:
+  test_fraction: 0.20          # newest 20% of interactions (by time) -> test
+  validation_fraction: 0.15    # newest 15% of TRAIN -> used only for tuning the hybrid weights
+  relevance_threshold: 4       # rating >= 4 counts as a "relevant" (liked) item
+
+features:
+  bayes_prior_strength: 10     # shrinkage strength for the Bayesian item rating
+
+models:
+  als_mf:
+    n_factors: 16
+    reg: 0.6
+    n_iters: 12
+    bias_reg: 10.0
+  hybrid:
+    grid:
+      w_mf: [0.0, 0.5, 1.0]
+      w_pop: [0.0, 0.5, 1.0, 1.5]
+      w_aff: [0.0, 0.5, 1.0, 2.0]
+
+evaluation:
+  k_values: [5, 10]
+  primary_k: 10
+
+tracking:
+  experiment: recommendation-pipeline
+  backend: local               # local = built-in file store; mlflow opts into MLflow tracking

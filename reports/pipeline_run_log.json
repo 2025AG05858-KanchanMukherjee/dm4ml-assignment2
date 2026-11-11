@@ -1,0 +1,139 @@
+{
+  "started": "2026-11-11T11:35:10",
+  "finished": "2026-11-11T11:35:33",
+  "config_seed": 42,
+  "success": true,
+  "tasks": [
+    {
+      "task": "ingest_data",
+      "deps": [],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "users",
+        "items",
+        "interactions"
+      ],
+      "duration_s": 3.04
+    },
+    {
+      "task": "validate_data",
+      "deps": [
+        "ingest_data"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "users",
+        "items",
+        "interactions"
+      ],
+      "duration_s": 0.79
+    },
+    {
+      "task": "prepare_data",
+      "deps": [
+        "validate_data"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "users",
+        "items",
+        "interactions"
+      ],
+      "duration_s": 0.2
+    },
+    {
+      "task": "transform_split",
+      "deps": [
+        "prepare_data"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "cutoff",
+        "train_rows",
+        "test_rows",
+        "train_range",
+        "test_range",
+        "matrix_shape",
+        "matrix_density",
+        "test_rows_from_users_unseen_in_train"
+      ],
+      "duration_s": 1.22
+    },
+    {
+      "task": "build_features",
+      "deps": [
+        "transform_split"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "n_users",
+        "n_items",
+        "n_features",
+        "as_of"
+      ],
+      "duration_s": 1.1
+    },
+    {
+      "task": "train_baseline",
+      "deps": [
+        "build_features"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "model"
+      ],
+      "duration_s": 0.19
+    },
+    {
+      "task": "train_mf",
+      "deps": [
+        "build_features"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "model",
+        "final_train_rmse"
+      ],
+      "duration_s": 1.25
+    },
+    {
+      "task": "train_hybrid",
+      "deps": [
+        "build_features",
+        "train_mf"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "model",
+        "w_mf",
+        "w_pop",
+        "w_aff"
+      ],
+      "duration_s": 12.53
+    },
+    {
+      "task": "evaluate_models",
+      "deps": [
+        "train_baseline",
+        "train_mf",
+        "train_hybrid"
+      ],
+      "attempts": 1,
+      "status": "success",
+      "result_keys": [
+        "popularity_baseline",
+        "als_matrix_factorization",
+        "hybrid_mf_popularity_genre"
+      ],
+      "duration_s": 2.15
+    }
+  ]
+}

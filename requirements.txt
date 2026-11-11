@@ -1,0 +1,12 @@
+# Core (everything the pipeline needs to run end-to-end; verified with these versions)
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+scikit-learn>=1.3        # not used by the models (custom ALS) - kept for optional experiments
+pyyaml>=6.0
+matplotlib>=3.8
+reportlab>=4.0           # final PDF report
+
+# Optional - auto-detected at runtime
+mlflow>=2.9              # experiment tracking UI; without it a local MLflow-style file store is used
+apache-airflow>=2.8      # only needed to run dags/recommendation_pipeline_dag.py in Airflow

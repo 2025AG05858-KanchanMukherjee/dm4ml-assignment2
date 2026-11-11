@@ -1,0 +1,24 @@
+entity,feature,dtype,description,formula,cold_start_default
+user,user_activity_count,int,Number of training interactions of the user,count(interactions),0
+user,user_avg_rating,float,Mean rating given by the user,mean(rating),global mean rating
+user,user_rating_std,float,Std-dev of the user's ratings (0 if <2 ratings),std(rating),0
+user,user_like_ratio,float,Share of the user's interactions rated >= relevance threshold,mean(rating >= 4),global like ratio
+user,days_since_last_interaction,float,Days between the user's last interaction and the as-of time (recency),as_of - max(timestamp),days since signup
+user,user_history_days,float,Days between first and last interaction,max(ts) - min(ts),0
+user,user_tenure_days,float,Days between signup and the as-of time,as_of - signup_date,computed from signup
+user,preferred_category,category,Genre with the largest rating-weighted share of the user's history,argmax(user_genre_affinity),Unknown
+user,preferred_category_share,float,Affinity share of the preferred genre (taste concentration),max(user_genre_affinity),0
+user,age,int,User age (imputed with the median when missing/invalid),users.age,median age
+item,item_popularity,int,Number of training interactions with the item,count(interactions),0
+item,item_popularity_rank,int,Rank by item_popularity (1 = most popular),rank(-item_popularity),last rank
+item,item_avg_rating,float,Raw mean rating of the item,mean(rating),global mean rating
+item,item_bayes_rating,float,Mean rating shrunk to the global mean: (C*m + sum)/(C + n),(C*global_mean + sum(rating)) / (C + n),global mean rating
+item,item_like_ratio,float,Share of item interactions rated >= relevance threshold,mean(rating >= 4),global like ratio
+item,item_age_years,float,Years between release_year and the as-of year,as_of.year - release_year,median age
+item,item_days_since_last_interaction,float,Days since anyone last interacted with the item,as_of - max(timestamp),days since first train event
+item,item_n_genres,int,Number of genres tagged on the item,len(genres),n/a (catalogue attribute)
+item,item_primary_genre,category,First listed genre,genres[0],n/a (catalogue attribute)
+interaction,user_genre_affinity,float[n_genres],User x genre matrix: rating-weighted share of the user's history in each genre (rows sum to 1),normalise(R @ (G / n_genres)),uniform
+interaction,genre_affinity_score,float,Mean affinity of the user for the genres of the candidate item (user-item pair),"mean(user_genre_affinity[u, genres(i)])",uniform
+interaction,item_bayes_minus_user_avg,float,Item Bayesian rating minus the user's average rating (does the item beat the user's own bar?),item_bayes_rating - user_avg_rating,item_bayes - global mean
+interaction,preferred_category_match,int,1 if the item's primary genre equals the user's preferred_category,item_primary_genre == preferred_category,0

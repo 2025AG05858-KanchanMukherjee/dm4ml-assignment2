@@ -1,0 +1,25 @@
+{
+  "users": {
+    "country_missing_filled": 40,
+    "age_imputed_with_median": {
+      "count": 45,
+      "median": 34.0
+    },
+    "duplicates_removed": 0,
+    "rows": 1187
+  },
+  "items": {
+    "genres_standardised_or_filled": 60,
+    "title_missing_filled": 20,
+    "release_year_imputed_with_median": {
+      "count": 10,
+      "median": 2000.0
+    },
+    "duplicates_removed": 0,
+    "rows": 597
+  },
+  "interactions": {
+    "duplicates_removed": 0,
+    "rows": 48029
+  }
+}
